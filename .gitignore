@@ -1,0 +1,32 @@
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# IDE 配置（VSCode）
+.vscode/
+.idea/
+
+# 项目日志和输出文件
+logs/
+ml/pred_score.csv
+ml/mlruns/
+
+# 包含密钥的配置文件
+configs/config.yaml
+
+# 其他临时文件
+*.log
+.DS_Store
+
+temp/
+*.tar.gz
+*.pkl
+*.h5
+*.bin
+*.ipynb_checkpoints/
