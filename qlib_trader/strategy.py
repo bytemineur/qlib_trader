@@ -41,6 +41,8 @@ class MyStrategy(SignalProducer):
                         return code[2:] + '.SH'
                     elif code.startswith('SZ'):
                         return code[2:] + '.SZ'
+                    elif code.startswith('BJ'):
+                        return code[2:] + '.BJ'
                     else:
                         return code
                 df['instrument'] = df['instrument'].apply(convert_code)

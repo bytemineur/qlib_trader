@@ -20,13 +20,14 @@ ml/mlruns/
 # 包含密钥的配置文件
 configs/config.yaml
 
-# 其他临时文件
-*.log
-.DS_Store
-
+# 数据文件
 temp/
 *.tar.gz
 *.pkl
 *.h5
 *.bin
 *.ipynb_checkpoints/
+
+# 其他临时文件
+*.log
+.DS_Store
