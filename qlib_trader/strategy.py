@@ -80,7 +80,7 @@ class MyStrategy(SignalProducer):
                     if order_price <= 0 or order_price > 300:
                         self.logger.info(f"股票 {stock} 无有效卖一价或价格大于300元，跳过买入")
                         continue
-                    order_volume = math.round((self.cash / order_price) / 100) * 100 # 按 100 股整数倍下单，四舍五入
+                    order_volume = round((self.cash / order_price) / 100) * 100 # 按 100 股整数倍下单，四舍五入
                     self.emit_signal(
                         signal_type=SignalType.BUY,
                         stock_code=stock,
