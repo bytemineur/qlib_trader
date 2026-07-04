@@ -49,8 +49,8 @@ class MyStrategy(SignalProducer):
                 pred_score = df.set_index('instrument')['score'].squeeze()
 
                 positions = self.xt_trader.query_stock_positions(self.acc)
-                holdings = [pos.stock_code for pos in positions]
-                
+                holdings = [pos.stock_code for pos in positions if pos.volume != 0]
+
                 buy_list, sell_list = self._get_dropout_trade_list(pred_score, holdings, self.topk, self.n_drop)
                 self.logger.info(f"预测分数：{pred_score.sort_values(ascending=False).head(self.topk)}")
                 self.logger.info(f"持仓列表长度: {len(holdings)}，买入列表长度: {len(buy_list)}，卖出列表长度: {len(sell_list)}")
