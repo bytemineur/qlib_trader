@@ -78,7 +78,7 @@ class MyStrategy(SignalProducer):
                 for stock in buy_list:
                     order_price = price_info[stock]['askPrice'][0]
                     if order_price <= 0 or order_price > 300:
-                        self.logger.info(f"股票 {stock} 无有效卖一价或价格大于300元，跳过买入")
+                        self.logger.info(f"股票 {stock} 无有效卖一价或价格大于300元，跳过买入") # 跳过价格等于0的股票避免除0错误
                         continue
                     order_volume = round((self.cash / order_price) / 100) * 100 # 按 100 股整数倍下单，四舍五入
                     self.emit_signal(
