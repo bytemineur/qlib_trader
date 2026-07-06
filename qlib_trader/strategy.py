@@ -77,10 +77,14 @@ class MyStrategy(SignalProducer):
                 
                 for stock in buy_list:
                     order_price = price_info[stock]['askPrice'][0]
-                    if order_price <= 0 or order_price > 300:
-                        self.logger.info(f"股票 {stock} 无有效卖一价或价格大于300元，跳过买入") # 跳过价格等于0的股票避免除0错误
+                    if order_price <= 0:
+                        self.logger.info(f"股票 {stock} 无有效卖一价，已停牌或涨停，跳过买入")
                         continue
-                    order_volume = round((self.cash / order_price) / 100) * 100 # 按 100 股整数倍下单，四舍五入
+                    # 根据股票代码前缀确定最小交易单位（科创板为200股，其余为100股）
+                    unit = 200 if stock.startswith('688') else 100
+                    order_volume = round((self.cash / order_price) / unit) * unit
+                    if order_volume == 0:
+                        order_volume = 200 if stock.startswith('688') else 100
                     self.emit_signal(
                         signal_type=SignalType.BUY,
                         stock_code=stock,
