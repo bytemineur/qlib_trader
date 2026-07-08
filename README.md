@@ -27,7 +27,7 @@
 ```
 +--------------------------------------------------------+
 |                    Windows Task Scheduler              |
-|  22:00 数据更新  |  23:00 生成 pred_score.csv           |
+|  2:00 数据更新  |  7:00 生成 pred_score.csv           |
 +------------------------+-------------------------------+
                          | pred_score.csv
                          v
@@ -313,10 +313,10 @@ python qlib_trader/main.py
 
 ## 定时任务（无人值守）
 
-### 数据更新（每日 22:00）
+### 数据更新（每日 2:00）
 
 ```powershell
-schtasks /create /tn "Qlib数据每日更新" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/update_qlib_data.ps1" /sc daily /st 22:00
+schtasks /create /tn "Qlib数据每日更新" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/update_qlib_data.ps1" /sc daily /st 2:00
 ```
 
 查询：
@@ -324,10 +324,10 @@ schtasks /create /tn "Qlib数据每日更新" /tr "powershell -ExecutionPolicy B
 schtasks /query /tn "Qlib数据每日更新" /fo LIST /v
 ```
 
-### 预测分数生成（每日 2:00）
+### 预测分数生成（每日 7:00）
 
 ```powershell
-schtasks /create /tn "Qlib预测分数生成" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/generate_pred_score.ps1" /sc daily /st 2:00
+schtasks /create /tn "Qlib预测分数生成" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/generate_pred_score.ps1" /sc daily /st 7:00
 ```
 
 查询：
@@ -401,8 +401,8 @@ qlib_trader/
 ## 每日运行流程
 
 ```
-22:00  数据更新     → 下载最新 Qlib 数据（需科学上网）
-23:00  预测生成     → Qlib 推理 → pred_score.csv
+2:00  数据更新     → 下载最新 Qlib 数据
+7:00  预测生成     → Qlib 推理 → pred_score.csv
 09:20  交易启动     → python main.py
          |
 09:25   调度器启动   → TradingEngine.start()
