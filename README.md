@@ -324,10 +324,10 @@ schtasks /create /tn "Qlib数据每日更新" /tr "powershell -ExecutionPolicy B
 schtasks /query /tn "Qlib数据每日更新" /fo LIST /v
 ```
 
-### 预测分数生成（每日 23:00）
+### 预测分数生成（每日 2:00）
 
 ```powershell
-schtasks /create /tn "Qlib预测分数生成" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/generate_pred_score.ps1" /sc daily /st 23:00
+schtasks /create /tn "Qlib预测分数生成" /tr "powershell -ExecutionPolicy Bypass -File C:/Users/bytemineur/Desktop/qlib_trader/script/generate_pred_score.ps1" /sc daily /st 2:00
 ```
 
 查询：
