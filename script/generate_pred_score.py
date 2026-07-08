@@ -40,7 +40,7 @@ def main():
     end_time = latest_day
 
     handler = Alpha158(
-        instruments="csiall",
+        instruments="all",
         start_time=start_time,
         end_time=end_time,
         infer_processors=[],      # 推理时不要拟合任何处理器
