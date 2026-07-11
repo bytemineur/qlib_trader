@@ -51,8 +51,7 @@
 | `health_checker.py` | 健康检查：连接、5 分钟心跳、内存 < 500MB |
 | `robust.py` | 崩溃重启：最多重试 10 次，间隔 60 秒 |
 | `script/generate_pred_score.py` | 加载 Qlib 模型 → 推理 → 输出 pred_score.csv |
-| `script/update_qlib_data.ps1` | 数据更新（CSV → Qlib 二进制） |
-| `script/data_collector/` | 数据采集三步脚本（股票列表 → 行情下载 → 转 Qlib 格式） |
+| `script/update_qlib_data.py` | 数据更新（CSV → Qlib 二进制） |
 
 ---
 
