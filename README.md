@@ -105,7 +105,7 @@ conda create -n qlib python=3.12.13 -y
 conda activate qlib
 
 # 2. 安装依赖
-pip install numpy cython pyqlib pyyaml schedule psutil xtquant pandas chinese-calendar
+pip install pyqlib xtquant
 
 # 3. Qlib 数据
 cd script
