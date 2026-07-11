@@ -12,6 +12,7 @@ xtdata.enable_hello = False
 
 from trading_engine import SignalProducer, SignalType
 
+
 class MyStrategy(SignalProducer):
     """策略实现"""
     

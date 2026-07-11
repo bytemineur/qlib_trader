@@ -4,6 +4,7 @@ import schedule
 import threading
 from chinese_calendar import is_workday
 
+
 class TradingScheduler:
     """交易时间调度器"""
     

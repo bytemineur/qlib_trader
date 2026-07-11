@@ -11,6 +11,12 @@ if (-not (Test-Path $pythonExe)) {
 }
 # -------------------------
 
+# ====== 新增：日志重定向（仅此3行） ======
+$logFile = "C:\Users\zhang\Desktop\qlib_trader\logs\update_qlib_data.log"
+New-Item -ItemType Directory -Force -Path (Split-Path $logFile -Parent) | Out-Null
+Start-Transcript -Path $logFile -Force   # -Force 每次覆盖，如需追加可改为 -Append
+# =========================================
+
 # Change to script directory and then into data_collector subdirectory
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $dataCollectorDir = Join-Path $scriptDir "data_collector"
