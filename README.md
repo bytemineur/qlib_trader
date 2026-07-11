@@ -204,7 +204,8 @@ qlib_trader/
 │   ├── generate_pred_score.py    # 预测分数生成
 │   ├── generate_pred_score.ps1   # PowerShell 封装
 │   ├── update_qlib_data.ps1      # 数据更新封装
-│   └── data_collector/           # 数据采集脚本
+│   ├── update_qlib_data.py       # 数据采集脚本
+│   └── dump_bin.py               # 将 CSV 格式转换为 Qlib 格式
 ├── configs/
 │   ├── config.yaml               # 实际配置（不入库）
 │   └── config.yaml.example       # 配置模板
