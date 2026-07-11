@@ -9,27 +9,30 @@ function Write-Host {
         [string]$Message
     )
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    # 调用原生的 Write-Host 防止死循环，并输出带时间戳的内容
     Microsoft.PowerShell.Utility\Write-Host "[$timestamp] $Message"
 }
 # =====================================================
 
 # ----- Configuration -----
-$pythonExe = "C:\ProgramData\anaconda3\envs\baostock_qlib\python.exe"
+$pythonExe = "C:\Users\zhang\.conda\envs\qlib\python.exe"
 if (-not (Test-Path $pythonExe)) {
     Write-Error "Python interpreter not found: $pythonExe"
     exit 1
 }
 # -------------------------
 
-# ====== 新增：日志重定向 ======
-$logFile = "C:\Users\zhang\Desktop\qlib_trader\logs\update_qlib_data.log"
+# ====== 改动 2：动态生成日志路径 ======
+# 获取脚本所在目录（即项目根目录）
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$logFile = Join-Path $scriptDir "logs\update_qlib_data.log"
+
+# 创建日志目录并开始转录
 New-Item -ItemType Directory -Force -Path (Split-Path $logFile -Parent) | Out-Null
 Start-Transcript -Path $logFile -Force
-# ==============================
+# =====================================
 
 # Change to script directory and then into data_collector subdirectory
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+# 注意：$scriptDir 已定义，此处不必重复
 $dataCollectorDir = Join-Path $scriptDir "data_collector"
 if (-not (Test-Path $dataCollectorDir)) {
     Write-Error "data_collector directory not found: $dataCollectorDir"
@@ -47,11 +50,9 @@ function Invoke-PythonScript {
     Write-Host ""
     Write-Host ">>> Executing: python $ScriptName $($Arguments -join ' ')"
     
-    # ====== 改动 2：管道逐行加时间戳（捕获 stdout 和 stderr） ======
     & $pythonExe $ScriptName @Arguments 2>&1 | ForEach-Object {
         Write-Host $_
     }
-    # ==============================================================
     
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Script $ScriptName failed with exit code: $LASTEXITCODE"
@@ -70,7 +71,6 @@ $homePath = $env:USERPROFILE
 $dataPath = "$homePath\.qlib\csv_data\cn_data"
 $qlibDir = "$homePath\.qlib\qlib_data\cn_data"
 
-# Ensure target directories exist
 New-Item -ItemType Directory -Force -Path $dataPath | Out-Null
 New-Item -ItemType Directory -Force -Path $qlibDir | Out-Null
 
