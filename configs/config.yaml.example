@@ -1,0 +1,11 @@
+# MiniQMT 连接配置
+qmt_path: "C:/Users/bytemineur/gjzq/gjzqQMT/userdata_mini"
+session_id: 123456
+account_id: "888600xxxx"
+
+# 钉钉告警配置
+dingtalk_webhook: "https://oapi.dingtalk.com/robot/send?access_token=YOUR_TOKEN"
+dingtalk_secret: "SEC_YOUR_SECRET"
+
+# 模型配置
+model_path: "C:/Users/bytemineur/Desktop/qlib_trader/ml/mlruns/420455618782912775/40d71f1277b1473a95830c4139f8219a/artifacts/trained_model"
