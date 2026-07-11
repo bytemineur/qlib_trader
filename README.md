@@ -51,7 +51,7 @@
 | `health_checker.py` | 健康检查：连接、5 分钟心跳、内存 < 500MB |
 | `robust.py` | 崩溃重启：最多重试 10 次，间隔 60 秒 |
 | `script/generate_pred_score.py` | 加载 Qlib 模型 → 推理 → 输出 pred_score.csv |
-| `script/update_qlib_data.ps1` | 数据更新（baostock → CSV → Qlib 二进制） |
+| `script/update_qlib_data.ps1` | 数据更新（CSV → Qlib 二进制） |
 | `script/data_collector/` | 数据采集三步脚本（股票列表 → 行情下载 → 转 Qlib 格式） |
 
 ---
@@ -74,7 +74,7 @@
 ## 每日运行流程
 
 ```
-20:00  数据更新     → baostock 下载 → 转 Qlib 二进制
+20:00  数据更新     → 数据下载 → 转 Qlib 二进制
 23:00  预测生成     → Qlib 推理 → ml/pred_score.csv
 09:20  交易启动     → python qlib_trader/main.py
 09:25  调度器启动   → TradingEngine.start()
@@ -105,7 +105,7 @@ conda create -n qlib python=3.12.13 -y
 conda activate qlib
 
 # 2. 安装依赖
-pip install numpy cython pyqlib pyyaml schedule psutil xtquant pandas chinese-calendar baostock
+pip install numpy cython pyqlib pyyaml schedule psutil xtquant pandas chinese-calendar
 
 # 3. Qlib 数据
 cd script
