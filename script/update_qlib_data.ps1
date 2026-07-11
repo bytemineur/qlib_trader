@@ -3,6 +3,17 @@
 
 $ErrorActionPreference = "Stop"
 
+# ====== 改动 1：重写 Write-Host，自动添加时间戳 ======
+function Write-Host {
+    param(
+        [string]$Message
+    )
+    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    # 调用原生的 Write-Host 防止死循环，并输出带时间戳的内容
+    Microsoft.PowerShell.Utility\Write-Host "[$timestamp] $Message"
+}
+# =====================================================
+
 # ----- Configuration -----
 $pythonExe = "C:\ProgramData\anaconda3\envs\baostock_qlib\python.exe"
 if (-not (Test-Path $pythonExe)) {
@@ -11,11 +22,11 @@ if (-not (Test-Path $pythonExe)) {
 }
 # -------------------------
 
-# ====== 新增：日志重定向（仅此3行） ======
+# ====== 新增：日志重定向 ======
 $logFile = "C:\Users\zhang\Desktop\qlib_trader\logs\update_qlib_data.log"
 New-Item -ItemType Directory -Force -Path (Split-Path $logFile -Parent) | Out-Null
-Start-Transcript -Path $logFile -Force   # -Force 每次覆盖，如需追加可改为 -Append
-# =========================================
+Start-Transcript -Path $logFile -Force
+# ==============================
 
 # Change to script directory and then into data_collector subdirectory
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -35,7 +46,13 @@ function Invoke-PythonScript {
     )
     Write-Host ""
     Write-Host ">>> Executing: python $ScriptName $($Arguments -join ' ')"
-    & $pythonExe $ScriptName @Arguments
+    
+    # ====== 改动 2：管道逐行加时间戳（捕获 stdout 和 stderr） ======
+    & $pythonExe $ScriptName @Arguments 2>&1 | ForEach-Object {
+        Write-Host $_
+    }
+    # ==============================================================
+    
     if ($LASTEXITCODE -ne 0) {
         Write-Error "Script $ScriptName failed with exit code: $LASTEXITCODE"
         exit $LASTEXITCODE
