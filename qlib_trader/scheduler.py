@@ -8,8 +8,9 @@ from chinese_calendar import is_workday
 class TradingScheduler:
     """交易时间调度器"""
     
-    def __init__(self, trading_system):
+    def __init__(self, trading_system, recorder=None):
         self.trading_system = trading_system
+        self.recorder = recorder
         self.running = False
     
     def is_trading_day(self):
@@ -65,5 +66,9 @@ class TradingScheduler:
     def _send_daily_report(self):
         if self.is_trading_day():
             print(f"[{datetime.now()}] 发送交易日报")
+            # 记录账户数据
+            if self.recorder:
+                today = datetime.now().strftime('%Y-%m-%d')
+                self.recorder.record_daily_snapshot(today)
             self.trading_system.send_daily_report()
             

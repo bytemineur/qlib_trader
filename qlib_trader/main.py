@@ -17,6 +17,7 @@ from health_checker import HealthChecker
 from robust import RobustTrader
 from trading_engine import TradingEngine
 from strategy import MyStrategy
+from recorder import PortfolioRecorder
 
 
 # 加载配置文件
@@ -73,7 +74,8 @@ def main():
     engine.add_strategy(strategy)
 
     # 5. 时间调度
-    scheduler = TradingScheduler(engine)
+    recorder = PortfolioRecorder(trader, acc)
+    scheduler = TradingScheduler(engine, recorder=recorder)
     scheduler.start()
 
     # 6. 健康检查
