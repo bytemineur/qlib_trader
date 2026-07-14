@@ -193,6 +193,7 @@ qlib_trader/
 │   ├── logger.py                 # 日志与监控
 │   ├── scheduler.py              # 时间调度
 │   ├── health_checker.py         # 健康检查
+│   ├── recorder.py               # 资产记录
 │   └── robust.py                 # 崩溃重启
 ├── ml/                           # 模型训练
 │   ├── workflow_by_code.ipynb    # 训练脚本
