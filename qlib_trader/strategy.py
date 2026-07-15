@@ -1,7 +1,6 @@
 """
 strategy.py - 测试策略（示例）
 """
-import math
 import datetime
 import traceback
 import pandas as pd
@@ -49,6 +48,12 @@ class MyStrategy(SignalProducer):
                 df['instrument'] = df['instrument'].apply(convert_code)
                 pred_score = df.set_index('instrument')['score'].squeeze()
 
+                # 剔除风险股票
+                risk_codes = [code for code in pred_score.index if self._is_risk_stock(code)]
+                if risk_codes:
+                    self.logger.info(f"从预测分数中剔除风险股票: {risk_codes}")
+                    pred_score = pred_score.drop(index=risk_codes)
+
                 positions = self.xt_trader.query_stock_positions(self.acc)
                 holdings = [pos.stock_code for pos in positions if pos.volume != 0]
 
@@ -61,11 +66,14 @@ class MyStrategy(SignalProducer):
 
                 # 执行调仓
                 price_info = xtdata.get_full_tick(buy_list + sell_list)
+
                 for stock in sell_list:
                     position = self.xt_trader.query_stock_position(self.acc, stock)
-                    if position.stock_code == stock:
-                        current_volume = position.volume
-                        current_price = price_info[stock]['bidPrice'][0]
+                    current_volume = position.volume
+                    current_price = price_info[stock]['bidPrice'][0]
+                    if current_price <= 0:
+                        self.logger.info(f"股票 {stock} 无有效买一价，已停牌或跌停，跳过卖出")
+                        continue
                     self.emit_signal(
                         signal_type=SignalType.SELL,
                         stock_code=stock,
@@ -148,3 +156,19 @@ class MyStrategy(SignalProducer):
         buy_list = today[:n_buy]
 
         return buy_list, sell_list
+    
+    def _is_risk_stock(self, stock_code: str) -> bool:
+        try:
+            info = xtdata.get_instrument_detail(stock_code, iscomplete=False)
+            if info is None:
+                # 查询不到时，为避免误判，默认不剔除（您也可以改为 True，按需调整）
+                return False
+            
+            name = info.get('InstrumentName', '')
+            # 检查 ST/*ST/退市 或 不可交易（停牌）
+            is_risk = any(kw in name for kw in ['ST', '*ST', '退']) or not info.get('IsTrading', True)
+            return is_risk
+        except Exception:
+            # 发生异常时，默认不剔除，避免阻塞交易
+            return False
+        

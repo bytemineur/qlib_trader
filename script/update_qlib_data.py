@@ -10,9 +10,9 @@ def on_progress(data):
     # data 是一个字典，例如：{'finished': 150, 'total': 500}
     print(f"下载进度: {data['finished']}/{data['total']}")
 
-# 1. 获取全部A股股票代码（沪深京）
-# '沪深京A股' 包含了上海、深圳和北京证券交易所的全部A股
-stock_list = xtdata.get_stock_list_in_sector("沪深京A股")
+# 1. 获取全部A股股票代码（沪深）
+# '沪深A股' 包含了上海、深圳证券交易所的全部A股
+stock_list = xtdata.get_stock_list_in_sector("沪深A股")
 print(f"获取到 {len(stock_list)} 只股票")
 
 # 2. 下载所有股票的历史日线数据到本地缓存
