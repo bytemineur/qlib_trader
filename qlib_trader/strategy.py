@@ -68,6 +68,10 @@ class MyStrategy(SignalProducer):
                 price_info = xtdata.get_full_tick(buy_list + sell_list)
 
                 for stock in sell_list:
+                    # 卖出前检查是否可交易
+                    if self._is_risk_stock(stock):
+                        self.logger.info(f"股票 {stock} 当前为风险股（ST/停牌），跳过卖出")
+                        continue
                     position = self.xt_trader.query_stock_position(self.acc, stock)
                     current_volume = position.volume
                     current_price = price_info[stock]['bidPrice'][0]
@@ -85,6 +89,10 @@ class MyStrategy(SignalProducer):
                     self.alert.alert_trade(stock, "卖出", current_volume, current_price, current_volume * current_price)
                 
                 for stock in buy_list:
+                    # 买入前检查是否可交易
+                    if self._is_risk_stock(stock):
+                        self.logger.info(f"股票 {stock} 当前为风险股（ST/停牌），跳过买入")
+                        continue
                     order_price = price_info[stock]['askPrice'][0]
                     if order_price <= 0:
                         self.logger.info(f"股票 {stock} 无有效卖一价，已停牌或涨停，跳过买入")
